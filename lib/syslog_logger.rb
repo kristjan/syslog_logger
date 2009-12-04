@@ -91,11 +91,11 @@ class SyslogLogger
   #
   # Due to the way syslog works, only one program name may be chosen.
 
-  def initialize(program_name = 'rails')
+  def initialize(program_name = 'rails', logopts = nil, facility = nil)
     @level = Logger::DEBUG
 
     return if defined? SYSLOG
-    self.class.const_set :SYSLOG, Syslog.open(program_name)
+    self.class.const_set :SYSLOG, Syslog.open(program_name, logopts, facility)
   end
 
   ##
