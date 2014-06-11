@@ -64,7 +64,9 @@ class SyslogLogger
         return true if #{LOGGER_LEVEL_MAP[meth]} < @level
         message ||= yield if block_given?
         if message
-          SYSLOG.#{LOGGER_MAP[meth]} clean(message)
+          message.split("\n").each do |line|
+            SYSLOG.#{LOGGER_MAP[meth]} clean(line)
+          end
         end
         return true
       end
@@ -105,7 +107,9 @@ class SyslogLogger
     severity ||= Logger::UNKNOWN
     return true if severity < @level
     message = clean(message || block.call)
-    SYSLOG.send LEVEL_LOGGER_MAP[severity], clean(message)
+    message.split("\n").each do |line|
+      SYSLOG.send LEVEL_LOGGER_MAP[severity], clean(line)
+    end
     return true
   end
 
